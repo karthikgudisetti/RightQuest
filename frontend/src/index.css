@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --color-teal-ink: #0f3d3a;
+  --color-teal: #0f766e;
+  --color-teal-soft: #99f6e4;
+  --color-coral: #ea580c;
+  --color-sun: #fbbf24;
+  --color-sand: #fff7ed;
+  --color-mist: #ecfdf5;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-teal-ink);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(251, 191, 36, 0.28), transparent 32%),
+    radial-gradient(circle at 88% 0%, rgba(14, 116, 144, 0.18), transparent 36%),
+    linear-gradient(180deg, #ecfdf5 0%, #fff7ed 45%, #f0fdfa 100%);
+  background-attachment: fixed;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.pattern-dots {
+  background-image: radial-gradient(rgba(15, 61, 58, 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.92);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-rise {
+  animation: rise-in 0.55s ease-out both;
+}
+
+.animate-pop {
+  animation: pop 0.45s ease-out both;
+}
+
+.animate-float {
+  animation: floaty 3.5s ease-in-out infinite;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-2xl bg-teal-700 px-5 py-3 font-bold text-white shadow-md transition hover:bg-teal-800 active:scale-[0.98];
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-2xl border-2 border-teal-700/20 bg-white/70 px-5 py-3 font-bold text-teal-900 transition hover:bg-white active:scale-[0.98];
+}
+
+.panel {
+  @apply rounded-[1.75rem] border border-teal-900/10 bg-white/75 backdrop-blur-sm;
+}
