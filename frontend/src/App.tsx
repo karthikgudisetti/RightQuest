@@ -14,12 +14,32 @@ import { QuizPage } from './pages/QuizPage';
 import { BadgesPage } from './pages/BadgesPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { TutorPage } from './pages/TutorPage';
+import { GamesPage } from './pages/GamesPage';
+import { VideosPage } from './pages/VideosPage';
 import { AdminDashboard, AdminKnowledgePage, AdminModulesPage } from './pages/AdminPages';
 
-function Protected({ children, admin }: { children: React.ReactNode; admin?: boolean }) {
-  const { user, onboardingDone } = useAuth();
+function Protected({
+  children,
+  admin,
+  allowOnboarding,
+}: {
+  children: React.ReactNode;
+  admin?: boolean;
+  allowOnboarding?: boolean;
+}) {
+  const { user, onboardingDone, ready } = useAuth();
+  if (!ready) {
+    return (
+      <div className="flex min-h-screen items-center justify-center font-semibold text-[#0a4f49]">
+        Loading RightsQuest…
+      </div>
+    );
+  }
   if (!user) return <Navigate to="/login" replace />;
-  if (!admin && !onboardingDone && user.role === 'CHILD') {
+  if (allowOnboarding && onboardingDone && user.role === 'CHILD') {
+    return <Navigate to="/" replace />;
+  }
+  if (!admin && !onboardingDone && user.role === 'CHILD' && !allowOnboarding) {
     return <Navigate to="/onboarding" replace />;
   }
   if (admin && user.role !== 'ADMIN' && user.role !== 'CONTENT_REVIEWER') {
@@ -30,9 +50,19 @@ function Protected({ children, admin }: { children: React.ReactNode; admin?: boo
 
 export default function App() {
   const hydrate = useAuth((s) => s.hydrate);
+  const ready = useAuth((s) => s.ready);
+
   useEffect(() => {
-    hydrate();
+    void hydrate();
   }, [hydrate]);
+
+  if (!ready) {
+    return (
+      <div className="flex min-h-screen items-center justify-center font-semibold text-[#0a4f49]">
+        Loading RightsQuest…
+      </div>
+    );
+  }
 
   return (
     <Routes>
@@ -41,7 +71,7 @@ export default function App() {
       <Route
         path="/onboarding"
         element={
-          <Protected>
+          <Protected allowOnboarding>
             <OnboardingPage />
           </Protected>
         }
@@ -54,8 +84,10 @@ export default function App() {
         }
       >
         <Route path="/" element={<HomePage />} />
+        <Route path="/games" element={<GamesPage />} />
         <Route path="/learn" element={<LearnPage />} />
         <Route path="/learn/:id" element={<ModulePage />} />
+        <Route path="/videos" element={<VideosPage />} />
         <Route path="/stories" element={<StoriesPage />} />
         <Route path="/stories/:id" element={<ScenarioPlayerPage />} />
         <Route path="/quizzes/:id" element={<QuizPage />} />

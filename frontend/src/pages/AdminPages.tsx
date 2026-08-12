@@ -28,12 +28,12 @@ export function AdminDashboard() {
 
   return (
     <div className="animate-rise space-y-6">
-      <h1 className="font-display text-3xl font-bold">{t(lang, 'admin')} Dashboard</h1>
+      <h1 className="font-display text-3xl font-bold text-[#12352f]">{t(lang, 'admin')} Dashboard</h1>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map(([label, value]) => (
           <div key={label as string} className="panel p-5">
-            <p className="text-sm font-bold text-teal-700">{label}</p>
-            <p className="mt-2 text-3xl font-extrabold">{value}</p>
+            <p className="text-sm font-bold text-[#0d6b63]">{label}</p>
+            <p className="mt-2 text-3xl font-extrabold text-[#12352f]">{value}</p>
           </div>
         ))}
       </div>

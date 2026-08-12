@@ -80,6 +80,7 @@ async function main() {
         {
           title: 'What is a right?',
           titleHi: 'अधिकार क्या है?',
+          videoUrl: 'https://www.youtube.com/embed/6F7ie1Z07aM',
           content:
             'A right is something every child should have so they can grow safely and happily. Rights are not rewards — they belong to you because you are a child. In India, laws and the Constitution protect children\'s dignity, education, health, and safety.\n\nRemember: knowing your rights helps you speak up kindly and ask a trusted adult for help when something feels wrong.',
           contentHi:
@@ -128,6 +129,7 @@ async function main() {
         {
           title: 'Private info stays private',
           titleHi: 'निजी जानकारी निजी रखें',
+          videoUrl: 'https://www.youtube.com/embed/25G4tLVH1JE',
           content:
             'Never share your full name, home address, school name, phone number, or passwords with strangers online. Real friends you meet only online can still be strangers. If someone asks for photos or secrets, pause and tell a trusted adult.\n\nSafe tip: Use privacy settings, block/report unkind users, and keep your accounts locked with strong passwords.',
           contentHi:
@@ -156,6 +158,7 @@ async function main() {
         {
           title: 'Safe and unsafe touch',
           titleHi: 'सुरक्षित और असुरक्षित स्पर्श',
+          videoUrl: 'https://www.youtube.com/embed/3WyHuHspbjk',
           content:
             'Your body belongs to you. Safe touches are caring and welcome (like a high-five). Unsafe or secret touches that make you uncomfortable should be stopped — say NO, get away if you can, and tell a trusted adult. It is never your fault.',
           contentHi:
@@ -201,6 +204,7 @@ async function main() {
           create: m.lessons.map((l, i) => ({
             title: l.title,
             content: l.content,
+            videoUrl: (l as { videoUrl?: string }).videoUrl ?? null,
             sequenceNumber: i + 1,
           })),
         },

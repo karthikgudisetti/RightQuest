@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { api } from '../lib/api';
 import { useAuth } from '../store/auth';
+import { api } from '../lib/api';
 import { t } from '../lib/i18n';
+import { ageGuide } from '../lib/ageGuide';
 
 export function ProgressPage() {
-  const { user, lang, refreshMe } = useAuth();
+  const { user, lang, ageGroup, refreshMe } = useAuth();
+  const guide = ageGuide(ageGroup, lang);
   const [stats, setStats] = useState({
     modulesCompleted: 0,
     badges: 0,
@@ -27,7 +29,13 @@ export function ProgressPage() {
 
   return (
     <div className="animate-rise space-y-6">
-      <h1 className="font-display text-3xl font-bold">{t(lang, 'progress')}</h1>
+      <section className="hero-banner px-6 py-7">
+        <p className="eyebrow">Your Journey</p>
+        <h1 className={`mt-2 font-display font-bold text-[#12352f] ${guide.titleScale}`}>
+          {t(lang, 'progress')}
+        </h1>
+      </section>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           ['XP', user?.xp ?? 0],
@@ -36,27 +44,28 @@ export function ProgressPage() {
           ['Avg Quiz', `${stats.avgQuizScore}%`],
         ].map(([label, value]) => (
           <div key={label as string} className="panel p-4">
-            <p className="text-sm font-bold text-teal-700">{label}</p>
-            <p className="mt-1 text-2xl font-extrabold">{value}</p>
+            <p className="text-sm font-bold text-[#0d6b63]">{label}</p>
+            <p className="mt-1 text-2xl font-extrabold text-[#12352f]">{value}</p>
           </div>
         ))}
       </div>
 
       <section className="panel p-5">
-        <h2 className="font-display text-xl font-bold">My Learning</h2>
+        <h2 className="font-display text-xl font-bold text-[#12352f]">My Learning</h2>
         <div className="mt-4 space-y-4">
-          {progress.length === 0 && <p className="text-teal-900/70">Start a module to track progress.</p>}
+          {progress.length === 0 && <p className="muted">Start a module to track progress.</p>}
           {progress.map((p) => (
             <div key={p.id}>
-              <div className="flex justify-between text-sm font-bold">
+              <div className="flex justify-between text-sm font-bold text-[#12352f]">
                 <span>
-                  {p.module.title} <span className="text-orange-600">· {p.module.category}</span>
+                  {p.module.title}{' '}
+                  <span className="text-[#0d6b63]">· {p.module.category}</span>
                 </span>
                 <span>{Math.round(p.completionPercentage)}%</span>
               </div>
-              <div className="mt-1 h-3 overflow-hidden rounded-full bg-teal-900/10">
+              <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-[#e8f6f2]">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-teal-600 to-orange-400"
+                  className="h-full rounded-full bg-[#0d6b63]"
                   style={{ width: `${p.completionPercentage}%` }}
                 />
               </div>
@@ -66,10 +75,10 @@ export function ProgressPage() {
       </section>
 
       <section className="panel p-5">
-        <h2 className="font-display text-xl font-bold">Personal milestones</h2>
+        <h2 className="font-display text-xl font-bold text-[#12352f]">Personal milestones</h2>
         <ul className="mt-3 space-y-2">
           {milestones.map((m) => (
-            <li key={m.name} className="font-semibold">
+            <li key={m.name} className="font-semibold text-[#12352f]">
               {m.reached ? '✅' : '○'} {m.name}
             </li>
           ))}

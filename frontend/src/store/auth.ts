@@ -4,6 +4,7 @@ import type { Lang } from '../lib/i18n';
 
 type AuthState = {
   user: User | null;
+  ready: boolean;
   onboardingDone: boolean;
   lang: Lang;
   ageGroup: string;
@@ -14,11 +15,12 @@ type AuthState = {
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   refreshMe: () => Promise<void>;
-  hydrate: () => void;
+  hydrate: () => Promise<void>;
 };
 
 export const useAuth = create<AuthState>((set, get) => ({
   user: null,
+  ready: false,
   onboardingDone: localStorage.getItem('rq_onboarded') === '1',
   lang: (localStorage.getItem('rq_lang') as Lang) || 'en',
   ageGroup: localStorage.getItem('rq_age') || '10-13',
@@ -47,13 +49,28 @@ export const useAuth = create<AuthState>((set, get) => ({
     localStorage.setItem('rq_refresh', data.refreshToken);
     const lang = (data.user.preferredLanguage as Lang) || get().lang;
     localStorage.setItem('rq_lang', lang);
-    // Demo accounts skip onboarding friction for judges
-    if (email.endsWith('@demo.com')) {
-      localStorage.setItem('rq_onboarded', '1');
-      set({ user: data.user, lang, onboardingDone: true });
+    const age = data.user.ageGroup || get().ageGroup || '10-13';
+    localStorage.setItem('rq_age', age);
+
+    // Demo child: pick age UI each login
+    if (data.user.role === 'CHILD' && email.endsWith('@demo.com')) {
+      localStorage.removeItem('rq_onboarded');
+      set({ user: data.user, lang, ageGroup: age, onboardingDone: false, ready: true });
       return;
     }
-    set({ user: data.user, lang });
+    if (email.endsWith('@demo.com')) {
+      localStorage.setItem('rq_onboarded', '1');
+      set({ user: data.user, lang, ageGroup: age, onboardingDone: true, ready: true });
+      return;
+    }
+    const onboarded = localStorage.getItem('rq_onboarded') === '1';
+    set({
+      user: data.user,
+      lang,
+      ageGroup: age,
+      onboardingDone: onboarded || data.user.role !== 'CHILD',
+      ready: true,
+    });
   },
   register: async (name, email, password) => {
     const { lang, ageGroup } = get();
@@ -67,22 +84,36 @@ export const useAuth = create<AuthState>((set, get) => ({
     );
     localStorage.setItem('rq_access', data.accessToken);
     localStorage.setItem('rq_refresh', data.refreshToken);
-    set({ user: data.user });
+    localStorage.removeItem('rq_onboarded');
+    set({ user: data.user, onboardingDone: false, ready: true });
   },
   logout: () => {
     localStorage.removeItem('rq_access');
     localStorage.removeItem('rq_refresh');
-    set({ user: null });
+    set({ user: null, ready: true });
   },
   refreshMe: async () => {
     const data = await api<{ user: User }>('/users/me');
+    if (data.user.ageGroup) {
+      localStorage.setItem('rq_age', data.user.ageGroup);
+      set({ user: data.user, ageGroup: data.user.ageGroup });
+      return;
+    }
     set({ user: data.user });
   },
-  hydrate: () => {
+  hydrate: async () => {
     const token = localStorage.getItem('rq_access');
-    if (!token) return;
-    get()
-      .refreshMe()
-      .catch(() => get().logout());
+    if (!token) {
+      set({ ready: true });
+      return;
+    }
+    try {
+      await get().refreshMe();
+      set({ ready: true });
+    } catch {
+      localStorage.removeItem('rq_access');
+      localStorage.removeItem('rq_refresh');
+      set({ user: null, ready: true });
+    }
   },
 }));

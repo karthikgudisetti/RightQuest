@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { randomUUID } from 'crypto';
 import { Role } from '@prisma/client';
 
 export type AuthUser = {
@@ -15,7 +16,8 @@ export function signAccessToken(user: AuthUser) {
 }
 
 export function signRefreshToken(user: AuthUser) {
-  return jwt.sign(user, process.env.JWT_REFRESH_SECRET!, { expiresIn: '7d' });
+  // jti keeps tokens unique even if issued in the same second
+  return jwt.sign({ ...user, jti: randomUUID() }, process.env.JWT_REFRESH_SECRET!, { expiresIn: '7d' });
 }
 
 export function authRequired(req: AuthedRequest, res: Response, next: NextFunction) {

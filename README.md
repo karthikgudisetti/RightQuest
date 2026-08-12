@@ -21,25 +21,33 @@ npm run dev
 | Child | child@demo.com  | demo1234  |
 | Admin | admin@demo.com  | demo1234  |
 
+## National UI (ages 8–16)
+
+One polished India-themed experience for every learner. Language switch stays in the top bar (EN / हिन्दी / తెలుగు).
+
+
 ## 5-minute demo path
 
 1. Log in as `child@demo.com`
-2. Complete onboarding (pick age + English/Hindi)
-3. Open **Online Safety** from Home / Learn
-4. Complete a lesson → earn XP
-5. Play demo story **The Friendly Stranger Online** → choose the safe option
-6. Take the Online Safety quiz → unlock badges
-7. Ask AI Tutor: “What does my right to education mean?”
-8. Log out → log in as `admin@demo.com` → edit a module title in Admin CMS
-9. Refresh child Learn page to see the update
+2. Onboarding → enter RightsQuest
+3. Home → **Play games** → Word Hunt (tap letters, clear levels)
+4. Try **Safe Trail** or **Safety Stars** → Next puzzle
+5. Story TV → safe choice
+6. **Videos** → Watch UNICEF / Childline films → “I learned this”
+7. Quiz + badges → AI Tutor
+8. Admin login → edit a module → refresh child Learn
 
 ## Stack
 
 - React + Vite + Tailwind CSS + Zustand
 - Node.js + Express + TypeScript
-- Prisma + SQLite (Postgres-ready schema)
+- Prisma + SQLite (Postgres-ready)
 - JWT auth + RBAC
-- AI tutor stub over approved knowledge base (optional `OPENAI_API_KEY`)
+- Optional `OPENAI_API_KEY` for live ChatGPT-style RightsQuest Buddy tutor
+
+## AI Tutor
+
+Set `OPENAI_API_KEY` in `backend/.env` for live GPT replies (scoped to children’s rights only). Without a key, the tutor still answers from the approved knowledge base in a friendly chat UI.
 
 ## Scripts
 
@@ -49,14 +57,6 @@ npm run dev
 | `npm run db:push` | Sync Prisma schema |
 | `npm run db:seed` | Reseed demo content |
 | `npm run setup` | Install + push + seed |
-
-## MVP included
-
-- Child auth, home, learn, stories, quizzes, badges, progress
-- XP / levels / badges
-- English + Hindi UI + translated seed content
-- Admin analytics + module CMS + knowledge base
-- AI tutor with crisis-intent safeguarding message
 
 ## Out of scope (later)
 

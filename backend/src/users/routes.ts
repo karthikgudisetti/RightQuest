@@ -20,7 +20,7 @@ usersRouter.patch(
   validateBody(
     z.object({
       name: z.string().min(2).optional(),
-      preferredLanguage: z.enum(['en', 'hi']).optional(),
+      preferredLanguage: z.enum(['en', 'hi', 'te']).optional(),
       ageGroup: z.string().optional(),
       avatar: z.string().optional(),
     })

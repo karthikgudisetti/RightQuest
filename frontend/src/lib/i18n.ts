@@ -1,4 +1,4 @@
-export type Lang = 'en' | 'hi';
+export type Lang = 'en' | 'hi' | 'te';
 
 const dict = {
   en: {
@@ -10,7 +10,9 @@ const dict = {
     password: 'Password',
     name: 'Your name',
     home: 'Home',
+    games: 'Games',
     learn: 'Learn',
+    videos: 'Videos',
     stories: 'Stories',
     quizzes: 'Quizzes',
     badges: 'Badges',
@@ -45,6 +47,8 @@ const dict = {
     correct: 'Nice choice!',
     learnMore: 'Here is why',
     missionComplete: 'Mission complete',
+    howToPlay: 'How to play',
+    valuableMsg: 'Message for you',
   },
   hi: {
     brand: 'राइट्सक्वेस्ट इंडिया',
@@ -55,7 +59,9 @@ const dict = {
     password: 'पासवर्ड',
     name: 'आपका नाम',
     home: 'होम',
+    games: 'गेम्स',
     learn: 'सीखें',
+    videos: 'वीडियो',
     stories: 'कहानियाँ',
     quizzes: 'क्विज़',
     badges: 'बैज',
@@ -90,11 +96,62 @@ const dict = {
     correct: 'शानदार चुनाव!',
     learnMore: 'यहाँ कारण है',
     missionComplete: 'मिशन पूरा',
+    howToPlay: 'कैसे खेलें',
+    valuableMsg: 'तुम्हारे लिए संदेश',
+  },
+  te: {
+    brand: 'రైట్స్‌క్వెస్ట్ ఇండియా',
+    tagline: 'కథలు మరియు ఆటలతో మీ హక్కులు నేర్చుకోండి',
+    login: 'క్వెస్ట్ ప్రారంభించండి',
+    register: 'ప్రొఫైల్ సృష్టించండి',
+    email: 'ఇమెయిల్',
+    password: 'పాస్‌వర్డ్',
+    name: 'మీ పేరు',
+    home: 'హోమ్',
+    games: 'గేమ్స్',
+    learn: 'నేర్చుకోండి',
+    videos: 'వీడియోలు',
+    stories: 'కథలు',
+    quizzes: 'క్విజ్',
+    badges: 'బ్యాడ్జ్‌లు',
+    progress: 'ప్రగతి',
+    tutor: 'AI ట్యూటర్',
+    admin: 'అడ్మిన్',
+    logout: 'లాగ్ అవుట్',
+    continueLearning: 'నేర్చుకోవడం కొనసాగించండి',
+    todaysMission: 'నేటి మిషన్',
+    yourBadges: 'మీ బ్యాడ్జ్‌లు',
+    xp: 'XP',
+    level: 'లెవెల్',
+    hi: 'హాయ్',
+    explorer: 'ఎక్స్‌ప్లోరర్',
+    ageGroup: 'వయసు గ్రూప్',
+    language: 'భాష',
+    next: 'తర్వాత',
+    back: 'వెనక్కి',
+    completeLesson: 'పాఠం పూర్తి చేయండి',
+    takeQuiz: 'క్విజ్ రాయండి',
+    playStory: 'కథ ఆడండి',
+    submit: 'సబ్మిట్',
+    ask: 'అడగండి',
+    disclaimer: 'కేవలం విద్యా సాధనం — న్యాయవాది లేదా అత్యవసర సేవ కాదు.',
+    modules: 'మాడ్యూల్స్',
+    scenarios: 'సన్నివేశాలు',
+    knowledge: 'నాలెడ్జ్ బేస్',
+    analytics: 'విశ్లేషణ',
+    save: 'సేవ్',
+    welcomeBack: 'మీ తదుపరి క్వెస్ట్‌కి సిద్ధమా?',
+    noBadges: 'బ్యాడ్జ్‌లు అన్‌లాక్ చేయడానికి పాఠాలు పూర్తి చేయండి!',
+    correct: 'చాలా బాగుంది!',
+    learnMore: 'ఇక్కడ కారణం',
+    missionComplete: 'మిషన్ పూర్తి',
+    howToPlay: 'ఎలా ఆడాలి',
+    valuableMsg: 'మీ కోసం సందేశం',
   },
 } as const;
 
 export type DictKey = keyof (typeof dict)['en'];
 
 export function t(lang: Lang, key: DictKey) {
-  return dict[lang][key] || dict.en[key];
+  return dict[lang]?.[key] || dict.en[key];
 }

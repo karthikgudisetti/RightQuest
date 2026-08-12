@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useAuth } from '../store/auth';
 import { t } from '../lib/i18n';
+import { ageGuide, sceneThemeFromTitle } from '../lib/ageGuide';
+import { ProgressRing } from '../components/GameEffects';
 
 type Module = {
   id: string;
@@ -15,7 +17,8 @@ type Module = {
 };
 
 export function LearnPage() {
-  const { lang } = useAuth();
+  const { lang, ageGroup } = useAuth();
+  const guide = ageGuide(ageGroup, lang);
   const [modules, setModules] = useState<Module[]>([]);
 
   useEffect(() => {
@@ -24,32 +27,44 @@ export function LearnPage() {
 
   return (
     <div className="animate-rise">
-      <h1 className="font-display text-3xl font-bold text-teal-900">{t(lang, 'learn')}</h1>
-      <p className="mt-2 text-teal-900/70">{t(lang, 'tagline')}</p>
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {modules.map((m, i) => (
-          <Link
-            key={m.id}
-            to={`/learn/${m.id}`}
-            className="panel block p-5 transition hover:-translate-y-0.5"
-            style={{ animationDelay: `${i * 60}ms` }}
-          >
-            <p className="text-xs font-bold uppercase tracking-wide text-orange-600">{m.category}</p>
-            <p className="mt-1 text-xl font-extrabold">{m.title}</p>
-            <p className="mt-2 text-sm text-teal-900/70">{m.description}</p>
-            <div className="mt-4 flex items-center justify-between text-sm font-bold text-teal-800">
-              <span>{m.estimatedMinutes} min · {m.difficulty}</span>
-              <span>{Math.round(m.progress?.completionPercentage ?? 0)}%</span>
-            </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-teal-900/10">
-              <div
-                className="h-full bg-teal-600"
-                style={{ width: `${m.progress?.completionPercentage ?? 0}%` }}
-              />
-            </div>
-          </Link>
-        ))}
+      <section className="hero-banner mb-6 px-6 py-7">
+        <p className="eyebrow">Learning Path</p>
+        <h1 className={`mt-2 font-display font-bold text-[#12352f] ${guide.titleScale}`}>Quest Map</h1>
+        <p className="mt-2 muted">{guide.tip}</p>
+        <Link className="btn-primary mt-4 inline-flex" to="/videos">
+          🎬 {lang === 'hi' ? 'वीडियो लर्निंग' : lang === 'te' ? 'వీడియో లెర్నింగ్' : 'Video learning'} →
+        </Link>
+      </section>
+      <div className="grid gap-4 md:grid-cols-2 stagger">
+        {modules.map((m) => {
+          const theme = sceneThemeFromTitle(m.title, m.category);
+          return (
+            <Link key={m.id} to={`/learn/${m.id}`} className="surface-card block overflow-hidden">
+              <div className="flex items-center gap-3 border-b border-[#d7e8e3] px-5 py-4">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f6f2] text-2xl">
+                  {theme.emoji}
+                </span>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-[#0d6b63]">{m.category}</p>
+                  <p className="text-lg font-extrabold text-[#12352f]">{m.title}</p>
+                </div>
+              </div>
+              <div className="p-5">
+                <p className="text-sm muted">{m.description}</p>
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <span className="text-sm font-bold text-[#12352f]">
+                    {m.estimatedMinutes} min · {m.difficulty}
+                  </span>
+                  <ProgressRing value={m.progress?.completionPercentage ?? 0} size={56} />
+                </div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
+      <Link className="btn-primary mt-6 inline-flex" to="/games">
+        {t(lang, 'games')} →
+      </Link>
     </div>
   );
 }

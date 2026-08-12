@@ -17,7 +17,7 @@ const registerSchema = z.object({
   name: z.string().min(2).max(80),
   email: z.string().email(),
   password: z.string().min(6),
-  preferredLanguage: z.enum(['en', 'hi']).optional(),
+  preferredLanguage: z.enum(['en', 'hi', 'te']).optional(),
   ageGroup: z.string().optional(),
   role: z.enum(['CHILD', 'ADMIN', 'CONTENT_REVIEWER']).optional(),
 });
@@ -76,13 +76,26 @@ authRouter.post('/login', validateBody(loginSchema), async (req, res) => {
   const authUser: AuthUser = { id: user.id, role: user.role, email: user.email };
   const accessToken = signAccessToken(authUser);
   const refreshToken = signRefreshToken(authUser);
-  await prisma.refreshToken.create({
-    data: {
-      token: refreshToken,
-      userId: user.id,
-      expiresAt: new Date(Date.now() + 7 * 86400000),
-    },
-  });
+  try {
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + 7 * 86400000),
+      },
+    });
+  } catch {
+    // Rare race: rotate token once
+    const retry = signRefreshToken(authUser);
+    await prisma.refreshToken.create({
+      data: {
+        token: retry,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + 7 * 86400000),
+      },
+    });
+    return res.json({ user: publicUser(user), accessToken, refreshToken: retry });
+  }
 
   res.json({ user: publicUser(user), accessToken, refreshToken });
 });

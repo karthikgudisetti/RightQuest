@@ -4,6 +4,8 @@ import { t } from '../lib/i18n';
 
 const childLinks = [
   { to: '/', key: 'home' as const },
+  { to: '/games', key: 'games' as const },
+  { to: '/videos', key: 'videos' as const },
   { to: '/learn', key: 'learn' as const },
   { to: '/stories', key: 'stories' as const },
   { to: '/badges', key: 'badges' as const },
@@ -12,24 +14,27 @@ const childLinks = [
 ];
 
 export function AppShell() {
-  const { user, lang, logout } = useAuth();
+  const { user, lang, setLang, logout } = useAuth();
   const navigate = useNavigate();
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'CONTENT_REVIEWER';
 
   return (
-    <div className="pattern-dots min-h-screen">
-      <header className="sticky top-0 z-20 border-b border-teal-900/10 bg-[#ecfdf5]/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <div className="national-shell">
+      <header className="nav-glass sticky top-0 z-20">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button
             type="button"
-            className="font-display text-xl font-bold text-teal-900 md:text-2xl"
+            className="font-display text-xl font-bold md:text-2xl"
             onClick={() => navigate(isAdmin ? '/admin' : '/')}
           >
-            {t(lang, 'brand')}
+            <span className="miracle-title">{t(lang, 'brand')}</span>
           </button>
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 rounded-full bg-[#f3faf7] p-1 md:flex">
             {(isAdmin
-              ? [{ to: '/admin', key: 'admin' as const }, { to: '/admin/modules', key: 'modules' as const }]
+              ? [
+                  { to: '/admin', key: 'admin' as const },
+                  { to: '/admin/modules', key: 'modules' as const },
+                ]
               : childLinks
             ).map((l) => (
               <NavLink
@@ -37,8 +42,10 @@ export function AppShell() {
                 to={l.to}
                 end={l.to === '/' || l.to === '/admin'}
                 className={({ isActive }) =>
-                  `rounded-xl px-3 py-2 text-sm font-bold transition ${
-                    isActive ? 'bg-teal-700 text-white' : 'text-teal-900/80 hover:bg-white/70'
+                  `rounded-full px-3 py-2 text-sm font-bold transition ${
+                    isActive
+                      ? 'bg-[#0d6b63] text-white shadow-sm'
+                      : 'text-[#3d5c56] hover:bg-white hover:text-[#0a4f49]'
                   }`
                 }
               >
@@ -47,10 +54,21 @@ export function AppShell() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            {user && !isAdmin && (
-              <div className="hidden rounded-xl bg-white/80 px-3 py-1.5 text-sm font-bold text-teal-900 sm:block">
-                ⭐ {user.xp} {t(lang, 'xp')}
+            {!isAdmin && (
+              <div className="lang-switch" aria-label="Language">
+                <button type="button" className={lang === 'en' ? 'active' : ''} onClick={() => setLang('en')}>
+                  EN
+                </button>
+                <button type="button" className={lang === 'hi' ? 'active' : ''} onClick={() => setLang('hi')}>
+                  हिन्दी
+                </button>
+                <button type="button" className={lang === 'te' ? 'active' : ''} onClick={() => setLang('te')}>
+                  తెలుగు
+                </button>
               </div>
+            )}
+            {user && !isAdmin && (
+              <div className="chip hidden sm:inline-flex">⭐ {user.xp} XP</div>
             )}
             <button
               type="button"
@@ -73,7 +91,7 @@ export function AppShell() {
                 end={l.to === '/'}
                 className={({ isActive }) =>
                   `whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold ${
-                    isActive ? 'bg-teal-700 text-white' : 'bg-white/70 text-teal-900'
+                    isActive ? 'bg-[#0d6b63] text-white' : 'bg-white text-[#0a4f49]'
                   }`
                 }
               >

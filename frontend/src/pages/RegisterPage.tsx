@@ -23,19 +23,20 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="pattern-dots flex min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <div className="panel animate-rise w-full max-w-md p-8">
-        <p className="font-display text-3xl font-bold text-teal-900">{t(lang, 'register')}</p>
+        <p className="eyebrow">Create profile</p>
+        <p className="mt-2 font-display text-3xl font-bold text-[#12352f]">{t(lang, 'register')}</p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
           <input
-            className="w-full rounded-xl border border-teal-900/15 bg-white px-4 py-3"
+            className="input-field"
             placeholder={t(lang, 'name')}
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
           <input
-            className="w-full rounded-xl border border-teal-900/15 bg-white px-4 py-3"
+            className="input-field"
             placeholder={t(lang, 'email')}
             type="email"
             value={email}
@@ -43,7 +44,7 @@ export function RegisterPage() {
             required
           />
           <input
-            className="w-full rounded-xl border border-teal-900/15 bg-white px-4 py-3"
+            className="input-field"
             placeholder={t(lang, 'password')}
             type="password"
             value={password}
@@ -51,12 +52,12 @@ export function RegisterPage() {
             required
             minLength={6}
           />
-          {error && <p className="text-sm font-semibold text-orange-700">{error}</p>}
+          {error && <p className="text-sm font-semibold text-[#b45309]">{error}</p>}
           <button className="btn-primary w-full" type="submit">
             {t(lang, 'next')}
           </button>
         </form>
-        <Link className="mt-4 inline-block font-bold text-teal-700" to="/login">
+        <Link className="mt-4 inline-block font-bold text-[#0d6b63]" to="/login">
           {t(lang, 'login')}
         </Link>
       </div>
