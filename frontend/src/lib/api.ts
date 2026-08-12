@@ -35,7 +35,11 @@ export async function api<T>(
   try {
     res = await fetch(`${API_BASE}${path}`, { ...options, headers });
   } catch {
-    throw new Error('Cannot reach server. Make sure the app is running (npm run dev).');
+    throw new Error(
+      import.meta.env.PROD
+        ? 'Cannot reach server. Please try again in a moment.'
+        : 'Cannot reach server. Make sure the app is running (npm run dev).'
+    );
   }
 
   const data = await res.json().catch(() => ({}));

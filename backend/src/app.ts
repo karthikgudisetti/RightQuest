@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -12,19 +11,25 @@ import { gamificationRouter } from './gamification/routes.js';
 import { aiRouter } from './ai/routes.js';
 import { adminRouter } from './admin/routes.js';
 
-const app = express();
-const PORT = Number(process.env.PORT) || 4000;
+export const app = express();
+app.set('trust proxy', 1);
+
+function isAllowedOrigin(origin?: string | null) {
+  if (!origin) return true;
+  if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return true;
+  if (/\.vercel\.app$/i.test(origin)) return true;
+  const extra = (process.env.CORS_ORIGIN || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return extra.includes(origin);
+}
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(
   cors({
     origin: (origin, cb) => {
-      // Allow local Vite ports / same-origin / tools with no Origin
-      if (!origin || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
-        cb(null, true);
-        return;
-      }
-      cb(null, false);
+      cb(null, isAllowedOrigin(origin));
     },
     credentials: true,
   })
@@ -54,14 +59,4 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({ error: 'Internal server error' });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`RightsQuest API running on http://localhost:${PORT}`);
-});
-
-server.on('error', (err: NodeJS.ErrnoException) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is busy. Stop the other process and retry.`);
-    process.exit(1);
-  }
-  throw err;
-});
+export default app;

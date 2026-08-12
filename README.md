@@ -58,6 +58,10 @@ Set `OPENAI_API_KEY` in `backend/.env` for live GPT replies (scoped to childrenâ
 | `npm run db:seed` | Reseed demo content |
 | `npm run setup` | Install + push + seed |
 
+## Deploy (Vercel)
+
+See **[DEPLOY_VERCEL.md](./DEPLOY_VERCEL.md)** â€” frontend + API on Vercel with Neon Postgres.
+
 ## Out of scope (later)
 
 Teacher/parent dashboards, Redis, true vector RAG, React Native, offline PWA sync.
