@@ -1,18 +1,19 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
 import { t } from '../lib/i18n';
+import { AppFooter } from './AppFooter';
 
 const childLinks = [
-  { to: '/', key: 'home' as const },
-  { to: '/games', key: 'games' as const },
-  { to: '/videos', key: 'videos' as const },
-  { to: '/learn', key: 'learn' as const },
-  { to: '/stories', key: 'stories' as const },
-  { to: '/badges', key: 'badges' as const },
-  { to: '/progress', key: 'progress' as const },
-  { to: '/rights', key: 'rights' as const },
-  { to: '/help', key: 'help' as const },
-  { to: '/tutor', key: 'tutor' as const },
+  { to: '/', key: 'home' as const, icon: '🏠' },
+  { to: '/games', key: 'games' as const, icon: '🎮' },
+  { to: '/videos', key: 'videos' as const, icon: '🎬' },
+  { to: '/learn', key: 'learn' as const, icon: '📚' },
+  { to: '/stories', key: 'stories' as const, icon: '📖' },
+  { to: '/rights', key: 'rights' as const, icon: '⚖️' },
+  { to: '/help', key: 'help' as const, icon: '🆘' },
+  { to: '/tutor', key: 'tutor' as const, icon: '🤖' },
+  { to: '/badges', key: 'badges' as const, icon: '🏅' },
+  { to: '/progress', key: 'progress' as const, icon: '📈' },
 ];
 
 export function AppShell() {
@@ -20,42 +21,50 @@ export function AppShell() {
   const navigate = useNavigate();
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'CONTENT_REVIEWER';
 
+  const links = isAdmin
+    ? [
+        { to: '/admin', key: 'admin' as const, icon: '⚙️' },
+        { to: '/admin/modules', key: 'modules' as const, icon: '📦' },
+      ]
+    : childLinks;
+
   return (
     <div className="national-shell">
       <header className="nav-glass sticky top-0 z-20">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <div className="nav-tricolor" aria-hidden />
+        <div className="site-header">
           <button
             type="button"
-            className="font-display text-xl font-bold md:text-2xl"
+            className="brand-lockup"
             onClick={() => navigate(isAdmin ? '/admin' : '/')}
           >
-            <span className="miracle-title">{t(lang, 'brand')}</span>
+            <span className="brand-flag" aria-hidden>
+              <span className="saffron" />
+              <span className="white" />
+              <span className="green" />
+            </span>
+            <span className="miracle-title font-display text-lg font-bold sm:text-xl">
+              {t(lang, 'brand')}
+            </span>
           </button>
-          <nav className="hidden items-center gap-1 rounded-full bg-[#f3faf7] p-1 md:flex">
-            {(isAdmin
-              ? [
-                  { to: '/admin', key: 'admin' as const },
-                  { to: '/admin/modules', key: 'modules' as const },
-                ]
-              : childLinks
-            ).map((l) => (
+
+          <nav className="site-nav" aria-label="Main">
+            {links.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 end={l.to === '/' || l.to === '/admin'}
-                className={({ isActive }) =>
-                  `rounded-full px-3 py-2 text-sm font-bold transition ${
-                    isActive
-                      ? 'bg-[#0d6b63] text-white shadow-sm'
-                      : 'text-[#3d5c56] hover:bg-white hover:text-[#0a4f49]'
-                  }`
-                }
+                className={({ isActive }) => `site-nav-link ${isActive ? 'active' : ''}`}
               >
-                {t(lang, l.key)}
+                <span className="site-nav-icon" aria-hidden>
+                  {l.icon}
+                </span>
+                <span>{t(lang, l.key)}</span>
               </NavLink>
             ))}
           </nav>
-          <div className="flex items-center gap-2">
+
+          <div className="site-header-actions">
             {!isAdmin && (
               <div className="lang-switch" aria-label="Language">
                 <button type="button" className={lang === 'en' ? 'active' : ''} onClick={() => setLang('en')}>
@@ -70,7 +79,10 @@ export function AppShell() {
               </div>
             )}
             {user && !isAdmin && (
-              <div className="chip hidden sm:inline-flex">⭐ {user.xp} XP</div>
+              <div className="xp-pill">
+                <span className="xp-pill-star">⭐</span>
+                <span>{user.xp}</span>
+              </div>
             )}
             <button
               type="button"
@@ -84,28 +96,11 @@ export function AppShell() {
             </button>
           </div>
         </div>
-        {!isAdmin && (
-          <div className="flex gap-2 overflow-x-auto px-4 pb-3 md:hidden">
-            {childLinks.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                end={l.to === '/'}
-                className={({ isActive }) =>
-                  `whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold ${
-                    isActive ? 'bg-[#0d6b63] text-white' : 'bg-white text-[#0a4f49]'
-                  }`
-                }
-              >
-                {t(lang, l.key)}
-              </NavLink>
-            ))}
-          </div>
-        )}
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6 md:py-8">
         <Outlet />
       </main>
+      <AppFooter />
     </div>
   );
 }

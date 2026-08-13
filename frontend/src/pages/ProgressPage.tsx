@@ -67,14 +67,15 @@ export function ProgressPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          ['XP', user?.xp ?? 0],
-          [t(lang, 'level'), `${user?.level} · ${user?.levelName}`],
-          [L(lang, 'Modules', 'मॉड्यूल', 'మాడ్యూల్స్'), `${stats.modulesCompleted}`],
-          [L(lang, 'Avg Quiz', 'औसत क्विज़', 'సగటు క్విజ్'), `${stats.avgQuizScore}%`],
-        ].map(([label, value]) => (
-          <div key={label as string} className="panel p-4">
-            <p className="text-sm font-bold text-[#0d6b63]">{label}</p>
-            <p className="mt-1 text-2xl font-extrabold text-[#12352f]">{value}</p>
+          { icon: '⭐', label: 'XP', value: user?.xp ?? 0, tone: 'stat-gold' },
+          { icon: '🎯', label: t(lang, 'level'), value: `${user?.level} · ${user?.levelName}`, tone: 'stat-teal' },
+          { icon: '📚', label: L(lang, 'Modules', 'मॉड्यूल', 'మాడ్యూల్స్'), value: stats.modulesCompleted, tone: 'stat-green' },
+          { icon: '✅', label: L(lang, 'Avg Quiz', 'औसत क्विज़', 'సగటు క్విజ్'), value: `${stats.avgQuizScore}%`, tone: 'stat-saffron' },
+        ].map((s) => (
+          <div key={s.label} className={`stat-card panel p-4 ${s.tone}`}>
+            <span className="stat-card-icon">{s.icon}</span>
+            <p className="stat-card-label">{s.label}</p>
+            <p className="stat-card-value">{s.value}</p>
           </div>
         ))}
       </div>
