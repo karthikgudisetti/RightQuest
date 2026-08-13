@@ -34,8 +34,10 @@ One polished India-themed experience for every learner. Language switch stays in
 4. Try **Safe Trail** or **Safety Stars** → Next puzzle
 5. Story TV → safe choice
 6. **Videos** → Watch UNICEF / Childline films → “I learned this”
-7. Quiz + badges → AI Tutor
-8. Admin login → edit a module → refresh child Learn
+7. **Rights** → 8 key child rights (RTE, POCSO, safety)
+8. **Help** → National helplines (1098, NCPCR, 1930)
+9. Quiz + badges → AI Tutor → **Print certificate** on Progress
+10. Admin login → edit a module → refresh child Learn
 
 ## Stack
 

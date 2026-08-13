@@ -10,6 +10,8 @@ const childLinks = [
   { to: '/stories', key: 'stories' as const },
   { to: '/badges', key: 'badges' as const },
   { to: '/progress', key: 'progress' as const },
+  { to: '/rights', key: 'rights' as const },
+  { to: '/help', key: 'help' as const },
   { to: '/tutor', key: 'tutor' as const },
 ];
 

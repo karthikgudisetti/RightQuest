@@ -1098,3 +1098,84 @@ body {
 .toy-tv-stand {
   display: none;
 }
+
+/* —— Help & Rights pages —— */
+.help-card-urgent {
+  border-color: rgba(220, 38, 38, 0.25);
+  background: linear-gradient(160deg, #fff5f5, #ffffff);
+}
+.help-card-icon {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 1rem;
+  background: #eef6f3;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+}
+.help-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.help-step-n {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #0d6b63;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+  display: grid;
+  place-items: center;
+}
+.rights-pick-grid {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 640px) {
+  .rights-pick-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.rights-pick {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--color-line);
+  background: #fff;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+}
+.rights-pick:hover {
+  transform: translateY(-1px);
+  border-color: #0d6b63;
+}
+.rights-pick.active {
+  border-color: #0d6b63;
+  box-shadow: 0 0 0 2px rgba(13, 107, 99, 0.15);
+  background: linear-gradient(160deg, #f3faf7, #fff);
+}
+.certificate {
+  border: 2px dashed #c9a227;
+  background: linear-gradient(180deg, #fffef8 0%, #ffffff 100%);
+}
+.certificate-name {
+  border-bottom: 3px solid #c9a227;
+  display: inline-block;
+  padding-bottom: 0.25rem;
+}
+.daily-tip-card {
+  border-left: 4px solid #e07a2f;
+  background: linear-gradient(90deg, rgba(224, 122, 47, 0.08), transparent);
+}
+.streak-chip {
+  background: linear-gradient(135deg, #e07a2f, #c9a227);
+  color: #fff;
+  border: none;
+}

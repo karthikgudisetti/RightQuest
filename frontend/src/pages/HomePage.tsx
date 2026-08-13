@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 import { useAuth } from '../store/auth';
 import { t, type Lang } from '../lib/i18n';
 import { ageGuide, sceneThemeFromTitle } from '../lib/ageGuide';
 import { ageTheme } from '../lib/ageTheme';
 import { CHAR_ART } from '../lib/characters';
+import { todayTip, tipText } from '../lib/dailyTips';
+import { speak } from '../lib/voice';
 
 function L(lang: Lang, en: string, hi: string, te: string) {
   if (lang === 'hi') return hi;
@@ -48,6 +50,8 @@ export function HomePage() {
     ) ||
     modules.find((m) => m.category === 'Online Safety') ||
     modules[0];
+
+  const tip = todayTip();
 
   const actions = [
     {
@@ -102,6 +106,32 @@ export function HomePage() {
       ),
       cta: L(lang, 'Go to learn', 'लर्निंग पर जाओ', 'లెర్న్‌కి వెళ్లండి'),
     },
+    {
+      n: '5',
+      to: '/rights',
+      icon: '⚖️',
+      title: L(lang, 'Know your rights', 'अपने अधिकार जानो', 'మీ హక్కులు తెలుసుకోండి'),
+      sub: L(
+        lang,
+        '8 key rights every child in India has — simple words.',
+        'भारत के हर बच्चे के 8 मुख्य अधिकार — सरल भाषा में।',
+        'భారతదేశంలో ప్రతి పిల్లవాడికి 8 ముఖ్య హక్కులు — సరళ భాషలో.'
+      ),
+      cta: L(lang, 'Explore rights', 'अधिकार देखो', 'హక్కులు చూడండి'),
+    },
+    {
+      n: '6',
+      to: '/help',
+      icon: '🆘',
+      title: L(lang, 'Get help', 'मदद लो', 'సహాయం పొందండి'),
+      sub: L(
+        lang,
+        'Childline 1098, NCPCR, and safety steps — national helplines.',
+        'चाइल्डलाइन 1098, एनसीपीसीआर — राष्ट्रीय हेल्पलाइन।',
+        'చైల్డ్‌లైన్ 1098, NCPCR — జాతీయ హెల్ప్‌లైన్‌లు.'
+      ),
+      cta: L(lang, 'Open help', 'मदद खोलो', 'సహాయం తెరవండి'),
+    },
   ];
 
   return (
@@ -127,6 +157,11 @@ export function HomePage() {
               <span className="chip chip-light">
                 {t(lang, 'level')} {user?.level}
               </span>
+              {(user?.currentStreak ?? 0) > 0 && (
+                <span className="chip streak-chip">
+                  🔥 {user?.currentStreak} {L(lang, 'day streak', 'दिन स्ट्रीक', 'రోజుల స్ట్రీక్')}
+                </span>
+              )}
             </div>
             <div className="mt-6 flex flex-wrap gap-2">
               <Link className="btn-primary inline-flex" to="/games">
@@ -143,12 +178,31 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Three clear choices */}
+      <section className="daily-tip-card panel p-5">
+        <div className="flex flex-wrap items-start gap-4">
+          <span className="text-3xl">{tip.icon}</span>
+          <div className="min-w-0 flex-1">
+            <p className="eyebrow">
+              {L(lang, "Today's rights tip", 'आज की अधिकार टिप', 'నేటి హక్కుల చిట్కా')}
+            </p>
+            <p className="mt-1 font-display text-lg font-bold text-[#0f2a26]">{tipText(lang, tip)}</p>
+            <button
+              type="button"
+              className="btn-secondary mt-3 !py-2 text-sm"
+              onClick={() => speak(tipText(lang, tip), lang)}
+            >
+              🔊 {L(lang, 'Hear tip', 'टिप सुनो', 'చిట్కా వినండి')}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Clear choices */}
       <section>
         <h2 className="section-title">
           {L(lang, 'What do you want to do?', 'तुम क्या करना चाहते हो?', 'మీరు ఏమి చేయాలనుకుంటున్నారు?')}
         </h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {actions.map((a) => (
             <Link key={a.to} to={a.to} className="home-action">
               <span className="home-action-n">{a.n}</span>
@@ -198,10 +252,14 @@ export function HomePage() {
       <p className="text-center text-sm font-bold text-[#3d5c56]">
         {L(
           lang,
-          'Need help? Tell a trusted adult or call Childline 1098.',
-          'मदद चाहिए? भरोसेमंद वयस्क को बताओ या 1098 कॉल करो।',
-          'సహాయం కావాలా? నమ్మకమైన పెద్దవారికి చెప్పండి లేదా 1098కి కాల్ చేయండి.'
+          'Need help? ',
+          'मदद चाहिए? ',
+          'సహాయం కావాలా? '
         )}
+        <Link to="/help" className="text-[#0d6b63] underline">
+          {L(lang, 'Childline 1098', 'चाइल्डलाइन 1098', 'చైల్డ్‌లైన్ 1098')}
+        </Link>
+        {L(lang, ' — free, 24/7.', ' — मुफ़्त, 24/7।', ' — ఉచిత, 24/7.')}
       </p>
     </div>
   );

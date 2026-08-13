@@ -31,9 +31,14 @@ export function LearnPage() {
         <p className="eyebrow">Learning Path</p>
         <h1 className={`mt-2 font-display font-bold text-[#12352f] ${guide.titleScale}`}>Quest Map</h1>
         <p className="mt-2 muted">{guide.tip}</p>
-        <Link className="btn-primary mt-4 inline-flex" to="/videos">
-          🎬 {lang === 'hi' ? 'वीडियो लर्निंग' : lang === 'te' ? 'వీడియో లెర్నింగ్' : 'Video learning'} →
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link className="btn-primary inline-flex" to="/videos">
+            🎬 {lang === 'hi' ? 'वीडियो लर्निंग' : lang === 'te' ? 'వీడియో లెర్నింగ్' : 'Video learning'} →
+          </Link>
+          <Link className="btn-secondary inline-flex" to="/rights">
+            ⚖️ {lang === 'hi' ? 'अपने अधिकार जानो' : lang === 'te' ? 'మీ హక్కులు' : 'Know your rights'} →
+          </Link>
+        </div>
       </section>
       <div className="grid gap-4 md:grid-cols-2 stagger">
         {modules.map((m) => {

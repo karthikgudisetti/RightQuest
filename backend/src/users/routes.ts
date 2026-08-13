@@ -75,5 +75,6 @@ usersRouter.get('/me/stats', authRequired, async (req: AuthedRequest, res) => {
     badges,
     avgQuizScore: Math.round(avgScore),
     scenariosCompleted: scenarios,
+    longestStreak: user.longestStreak,
   });
 });

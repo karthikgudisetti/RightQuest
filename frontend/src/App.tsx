@@ -16,6 +16,8 @@ import { ProgressPage } from './pages/ProgressPage';
 import { TutorPage } from './pages/TutorPage';
 import { GamesPage } from './pages/GamesPage';
 import { VideosPage } from './pages/VideosPage';
+import { HelpPage } from './pages/HelpPage';
+import { RightsPage } from './pages/RightsPage';
 import { AdminDashboard, AdminKnowledgePage, AdminModulesPage } from './pages/AdminPages';
 
 function Protected({
@@ -94,6 +96,8 @@ export default function App() {
         <Route path="/badges" element={<BadgesPage />} />
         <Route path="/progress" element={<ProgressPage />} />
         <Route path="/tutor" element={<TutorPage />} />
+        <Route path="/help" element={<HelpPage />} />
+        <Route path="/rights" element={<RightsPage />} />
       </Route>
       <Route
         element={
